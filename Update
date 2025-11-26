@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tombolă Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>TOMBOLĂ ONLINE</h1>
+    <p>Cumpără un bilet și intri automat în extragere!</p>
+
+    <h2>Preț bilet: 10 RON</h2>
+
+    <button id="buy">Cumpără bilet</button>
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        const buyBtn = document.getElementById("buy");
+
+        buyBtn.addEventListener("click", async () => {
+            const response = await fetch("/create-checkout-session", { method: "POST" });
+            const session = await response.json();
+
+            const stripe = Stripe(session.publicKey);
+            stripe.redirectToCheckout({ sessionId: session.id });
+        });
+    </script>
+
+</body>
+</html>
